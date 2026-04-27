@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Trading Scanner Pro V2</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0b0f14;
+    color: white;
+    font-family: Arial;
+    padding: 18px;
+}
+
+.container {
+    max-width: 520px;
+    margin: auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    color: #00ff99;
+    font-size: 28px;
+}
+
+.header p {
+    color: #999;
+    margin-top: 6px;
+}
+
+.status-box {
+    background: #151a21;
+    padding: 15px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.signal-card {
+    background: #151a21;
+    padding: 18px;
+    border-radius: 14px;
+    margin-bottom: 15px;
+    border-left: 5px solid #00ff99;
+}
+
+.pair {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.signal {
+    font-size: 17px;
+    margin-bottom: 10px;
+    color: #00ff99;
+}
+
+.detail {
+    color: #cccccc;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.start {
+    background: #00cc66;
+    color: white;
+}
+
+.stop {
+    background: #ff4444;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>SMART TRADING SCANNER PRO</h1>
+        <p>Confidence Based Live Signal Engine</p>
+    </div>
+
+    <div class="status-box" id="status">
+        Loading scanner status...
+    </div>
+
+    <div id="signals">
+        Loading signal cards...
+    </div>
+
+    <button class="button start" onclick="fetchSignals()">
+        START SCANNER
+    </button>
+
+    <button class="button stop" onclick="stopBot()">
+        STOP SCANNER
+    </button>
+
+</div>
+
+<script>
+let lastAlerts = [];
+
+function playAlert() {
+    try {
+        let audio = new Audio("https://www.soundjay.com/buttons/sounds/beep-07.mp3");
+        audio.play();
+    } catch (e) {}
+}
+
+function showPopup(message) {
+    alert("🚨 SIGNAL ALERT 🚨\n\n" + message);
+}
+
+function createCards(signals) {
+    let html = "";
+
+    signals.forEach(item => {
+        html += `
+            <div class="signal-card">
+                <div class="pair">${item.pair}</div>
+                <div class="signal">${item.signal}</div>
+
+                <div class="detail">
+                    Confidence: ${item.confidence}%<br>
+                    Entry: ${item.entry}<br>
+                    Stop Loss: ${item.sl}<br>
+                    Take Profit: ${item.tp}<br>
+                    R:R Ratio: ${item.rr}
+                </div>
+            </div>
+        `;
+
+        let alertKey = item.pair + item.signal + item.entry;
+
+        if (
+            (item.signal.includes("BUY") || item.signal.includes("SELL")) &&
+            !lastAlerts.includes(alertKey)
+        ) {
+            playAlert();
+            showPopup(
+                item.pair + "\n" +
+                item.signal + "\n" +
+                "Entry: " + item.entry
+            );
+
+            lastAlerts.push(alertKey);
+        }
+    });
+
+    document.getElementById("signals").innerHTML = html;
+}
+
+async function fetchSignals() {
+    try {
+        const response = await fetch("signals.json");
+        const data = await response.json();
+
+        document.getElementById("status").innerHTML =
+            "Bot Status: " + data.status +
+            "<br>Last Update: " + data.last_update;
+
+        createCards(data.signals);
+
+    } catch (error) {
+        document.getElementById("signals").innerHTML =
+            "Error loading live signals";
+    }
+}
+
+function stopBot() {
+    document.getElementById("status").innerHTML =
+        "Bot Status: STOPPED";
+
+    document.getElementById("signals").innerHTML =
+        "Scanner stopped...";
+}
+
+setInterval(fetchSignals, 5000);
+fetchSignals();
+</script>
+
+</body>
+</html>

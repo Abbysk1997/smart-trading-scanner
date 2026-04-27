@@ -1,0 +1,10 @@
+{
+  "name": "Smart Trading Scanner Pro",
+  "short_name": "ScannerPro",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#00ff99",
+  "orientation": "portrait"
+}
+

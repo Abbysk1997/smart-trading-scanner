@@ -1,0 +1,42 @@
+{
+  "status": "RUNNING",
+  "last_update": "13:19:33",
+  "signals": [
+    {
+      "pair": "BTCUSDT",
+      "signal": "HIGH QUALITY BUY",
+      "entry": 77976.2,
+      "confidence": 81,
+      "sl": 77326.51,
+      "tp": 79275.58,
+      "rr": "1:2"
+    },
+    {
+      "pair": "ETHUSDT",
+      "signal": "HIGH QUALITY BUY",
+      "entry": 2328.72,
+      "confidence": 87,
+      "sl": 2306.72,
+      "tp": 2372.72,
+      "rr": "1:2"
+    },
+    {
+      "pair": "DOGEUSDT",
+      "signal": "HIGH QUALITY BUY",
+      "entry": 0.0984,
+      "confidence": 71,
+      "sl": 0.0975,
+      "tp": 0.1002,
+      "rr": "1:2"
+    },
+    {
+      "pair": "XRPUSDT",
+      "signal": "NO TRADE",
+      "entry": 1.4265,
+      "confidence": 71,
+      "sl": "-",
+      "tp": "-",
+      "rr": "-"
+    }
+  ]
+}
